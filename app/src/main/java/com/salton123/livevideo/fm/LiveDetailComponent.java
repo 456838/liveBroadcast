@@ -1,11 +1,14 @@
 package com.salton123.livevideo.fm;
 
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
 import com.salton123.base.BaseSupportFragment;
 import com.salton123.livevideo.LiveBroadcastSource;
 import com.salton123.livevideo.R;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.shuyu.gsyvideoplayer.video.base.GSYVideoPlayer;
 
@@ -48,8 +51,6 @@ public class LiveDetailComponent extends BaseSupportFragment {
                 pop();
             }
         });
-        videoView.setRotation(90);
-        videoView.requestLayout();
 
         if (videoView.getRenderProxy() ==null){
             toast("getRenderProxy == null");
@@ -60,6 +61,33 @@ public class LiveDetailComponent extends BaseSupportFragment {
 
     @Override
     public void InitListener() {
-
+        f(R.id.rotation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                videoView.setRotation(videoView.getRotation()+90);
+                videoView.requestLayout();
+            }
+        });
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        GSYVideoManager.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume();
+    }
+
+
+    public boolean onBackPressed() {
+        if (StandardGSYVideoPlayer.backFromWindowFull(getActivity())) {
+            return true;
+        }
+        return false;
+    }
+
 }
